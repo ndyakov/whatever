@@ -10,8 +10,8 @@ import (
 
 // Params is a type on top of map[string]interface{}
 // that has a few useful getters and other methods.
-// This type can help you to work with json data that
-// can be unmarshalled into it and then extracted with
+// This type can help you to work with JSON data that
+// can be unmarshaled into it and then extracted with
 // the appropriate type (it even has a getter for time.Time).
 // Also the Required and Empty methods may be helpful with
 // validating data. It is possible to work with nested Params,
@@ -159,7 +159,7 @@ func (p Params) GetFloat(key string) float32 {
 
 // GetTime will return the value with the specified key
 // parsed as time.Time structure. The layout is time.RFC3339
-// or in other words the JSON format for the Date object in js.
+// or in other words the JSON format for the Date object in JavaScript.
 // The value should look like this:
 //     "2015-02-27T21:53:57.582Z"
 // Otherwise returns time.Time{}
@@ -185,7 +185,7 @@ func (p Params) GetSlice(key string) []interface{} {
 
 // GetSliceStrings will return a slice of strings.
 // This slice of strings will be a result of casting the value
-// coresponding to the provided key to a slice of interface{}
+// corresponding to the provided key to a slice of interface{}
 // and then individually casting each element to a string.
 // Only those elements that can be casted to a string will be
 // present in the final result. Those that cannot be casted to string
@@ -209,7 +209,7 @@ func (p Params) GetSliceStrings(key string) []string {
 
 // GetSliceInts will return a slice of strings.
 // This slice of strings will be a result of casting the value
-// coresponding to the provided key to a slice of interface{}
+// corresponding to the provided key to a slice of interface{}
 // and then individually casting each element to an int.
 // Only those elements that can be casted to an int will be
 // present in the final result. Those who cannot be casted to int
@@ -236,25 +236,25 @@ func (p Params) GetSliceInts(key string) []int {
 // gorilla`s schema or goji`s params. The schema and params
 // packages expects different keys for the nested values. For
 // this to be able to generate the expected keys you may need to
-// pass the prefix and the sufix of the nested key. If the prefix
+// pass the prefix and the suffix of the nested key. If the prefix
 // is empty string, then the prefix will be set to dot (".") and
-// the sufix will be an empty string. This is the way that gorilla`s
+// the suffix will be an empty string. This is the way that gorilla`s
 // schema expect the nested keys to be represented. Example:
 //     some_key.inner_key.last_key
 // This somewhat resembles the mongo notation of nested objects as well.
 // To be able to use this with params, you will need to pass an prefix "["
-// and sufix "]". The key from the previous example will now be:
+// and suffix "]". The key from the previous example will now be:
 //     some_key[inner_key][last_key]
 //
 // If the Params structure is blank, then an empty url.Values will be returned.
-func (p Params) URLValues(prefix, sufix string) url.Values {
-	return p.toURLValues(p, prefix, sufix, false)
+func (p Params) URLValues(prefix, suffix string) url.Values {
+	return p.toURLValues(p, prefix, suffix, false)
 }
 
-func (p Params) toURLValues(set Params, prefix, sufix string, subParse bool) url.Values {
+func (p Params) toURLValues(set Params, prefix, suffix string, subParse bool) url.Values {
 	if prefix == "" {
 		prefix = "."
-		sufix = ""
+		suffix = ""
 	}
 
 	result := url.Values{}
@@ -262,10 +262,10 @@ func (p Params) toURLValues(set Params, prefix, sufix string, subParse bool) url
 	for key, value := range set {
 		var foundSubset bool
 		if v, ok := value.(Params); ok {
-			subset = p.toURLValues(v, prefix, sufix, true)
+			subset = p.toURLValues(v, prefix, suffix, true)
 			foundSubset = true
 		} else if v, ok := value.(map[string]interface{}); ok {
-			subset = p.toURLValues(Params(v), prefix, sufix, true)
+			subset = p.toURLValues(Params(v), prefix, suffix, true)
 			foundSubset = true
 		} else if v, ok := value.([]interface{}); ok {
 			for _, el := range v {
@@ -277,14 +277,14 @@ func (p Params) toURLValues(set Params, prefix, sufix string, subParse bool) url
 			for k, v := range subset {
 				nestedKey := fmt.Sprintf("%s%s", key, k)
 				if subParse {
-					nestedKey = fmt.Sprintf("%s%s%s%s", prefix, key, sufix, k)
+					nestedKey = fmt.Sprintf("%s%s%s%s", prefix, key, suffix, k)
 				}
 				result[nestedKey] = append(result[nestedKey], v...)
 			}
 		} else {
 			valueKey := key
 			if subParse {
-				valueKey = fmt.Sprintf("%s%s%s", prefix, key, sufix)
+				valueKey = fmt.Sprintf("%s%s%s", prefix, key, suffix)
 			}
 			result[valueKey] = append(result[valueKey], stringify(value))
 		}

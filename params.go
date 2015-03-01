@@ -1,6 +1,7 @@
 package whatever
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/url"
 	"strconv"
@@ -18,6 +19,15 @@ import (
 // getting an Interface that you can cast yourself to the
 // wanted type and adding new values to the Params structure.
 type Params map[string]interface{}
+
+// NewFromJSON receives a slice of bytes that should be json
+// body and returns Params structure for that json body and an
+// error if there was one while decoding the json.
+func NewFromJSON(jsonBody []byte) (Params, error) {
+	var p Params
+	err := json.Unmarshal(jsonBody, &p)
+	return p, err
+}
 
 // Add adds a new pair(key, value) to the Params structure.
 // Returns true if an existing value was overwritten.

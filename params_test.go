@@ -39,6 +39,17 @@ func TestParamsUnmarshal(t *testing.T) {
 	}
 }
 
+func TestNewFromJSON(t *testing.T) {
+	params, err := NewFromJSON(body)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if params.Get("string") != "test" {
+		t.Error("Something went wrong with NewFromJSON")
+	}
+}
+
 func TestParamsAdd(t *testing.T) {
 	p := Params{}
 	if _, ok := p["one"]; ok {

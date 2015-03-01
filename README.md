@@ -3,6 +3,7 @@
 Package __whatever__ is a Go package that exports type Params with some useful methods on top of map[string]interface{}
 
 [![BuildStatus](https://travis-ci.org/ndyakov/whatever.png)](https://travis-ci.org/ndyakov/whatever)
+[![Coverage Status](https://coveralls.io/repos/ndyakov/whatever/badge.svg?branch=master)](https://coveralls.io/r/ndyakov/whatever?branch=master)
 [![GoDoc](https://godoc.org/github.com/ndyakov/whatever?status.png)](https://godoc.org/github.com/ndyakov/whatever)
 [![status](https://sourcegraph.com/api/repos/github.com/ndyakov/whatever/.badges/status.svg)](https://sourcegraph.com/github.com/ndyakov/whatever)
 

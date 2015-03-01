@@ -4,7 +4,7 @@ Package __whatever__ is a Go package that exports type Params with some useful m
 
 [![BuildStatus](https://travis-ci.org/ndyakov/whatever.png)](https://travis-ci.org/ndyakov/whatever)
 [![GoDoc](https://godoc.org/github.com/ndyakov/whatever?status.png)](https://godoc.org/github.com/ndyakov/whatever)
-[![views](https://sourcegraph.com/api/repos/github.com/ndyakov/whatever/.counters/views.svg)](https://sourcegraph.com/github.com/ndyakov/whatever)
+[![status](https://sourcegraph.com/api/repos/github.com/ndyakov/whatever/.badges/status.svg)](https://sourcegraph.com/github.com/ndyakov/whatever)
 
 ## Install
 

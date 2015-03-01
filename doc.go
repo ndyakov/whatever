@@ -1,6 +1,5 @@
-// Whatever
-// Whatever is a package that holds a single type
-// Params. The Params type is map[string]interface{} with
+// Package whatever holds just one type - Params.
+// The Params type is map[string]interface{} with
 // some useful methods to it.
 // This type was initially created to be used as structure
 // in which JSON requests are to be unmarshaled and accessed

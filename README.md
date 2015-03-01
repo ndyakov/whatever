@@ -16,7 +16,19 @@ Package __whatever__ is a Go package that exports type Params with some useful m
 
 ## Introduction
 
-The main idea behind __whatever__ was for the type Params to be used when unmarshaling JSON data from an `application/json` request, but after adding the `Add` and `Remove` methods I think that this Params type can be useful in variety of other cases as well.
+The main idea behind __whatever__ was for the type Params to be
+used when unmarshaling JSON data from an `application/json` request,
+but after adding the `Add` and `Remove` methods I think that this Params
+type can be useful in variety of other cases as well.
+
+There is a method that can transform the Params structure to
+url.Values structure with specified prefix and suffix, for the
+result can be used with Gorilla`s schema or Goji`s params packages.
+Although some of the getters are useful for unmarshaled JSON
+date you can also Add your own values to the Params structure.
+You can also access nested Params objects.
+If you need you can validate the existence of a specific key by
+using the Required method.
 
 ### [type Params](http://godoc.org/github.com/ndyakov/whatever#Params)
 _This may be outdated, please check the godoc for up-to-date documentation_

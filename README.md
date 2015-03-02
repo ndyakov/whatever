@@ -97,7 +97,7 @@ func sum(p whatever.Params) int {
 }
 
 func main() {
-  p := Params{x: 10, y: 5}
+  p := whatever.Params{x: 10, y: 5}
   fmt.Println(sum(p)) // 15
 }
 ```

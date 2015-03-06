@@ -30,7 +30,7 @@ var body = []byte(`
 }
 `)
 
-func TestParamsUnmarshal(t *testing.T) {
+func TestParams_Unmarshal(t *testing.T) {
 	var params Params
 	request := bytes.NewReader(body)
 	err := json.NewDecoder(request).Decode(&params)
@@ -50,7 +50,7 @@ func TestNewFromJSON(t *testing.T) {
 	}
 }
 
-func TestParamsAdd(t *testing.T) {
+func TestParams_Add(t *testing.T) {
 	p := Params{}
 	if _, ok := p["one"]; ok {
 		wrong(t, "[\"one\"]", false, true)
@@ -74,7 +74,7 @@ func TestParamsAdd(t *testing.T) {
 	}
 }
 
-func TestParamsAddRecursive(t *testing.T) {
+func TestParams_Add_recursive(t *testing.T) {
 	p := Params{"one": 1}
 	// This should detect the recursive adding and
 	// should NOT add p with the params key.
@@ -84,7 +84,7 @@ func TestParamsAddRecursive(t *testing.T) {
 	}
 }
 
-func TestParamsRequired(t *testing.T) {
+func TestParams_Required(t *testing.T) {
 	p := Params{"one": 1, "emtpyString": ""}
 	if err := p.Required("one"); err != nil {
 		wrong(t, "Required", nil, err)
@@ -137,7 +137,7 @@ func TestParamsRequired(t *testing.T) {
 	}
 }
 
-func TestParamsDelete(t *testing.T) {
+func TestParams_Delete(t *testing.T) {
 	p := Params{"one": 1}
 	p.Remove("one")
 
@@ -146,7 +146,7 @@ func TestParamsDelete(t *testing.T) {
 	}
 }
 
-func TestParamsEmpty(t *testing.T) {
+func TestParams_Empty(t *testing.T) {
 	p := Params{}
 	if !p.Empty() {
 		wrong(t, "Empty", true, false)
@@ -159,7 +159,7 @@ func TestParamsEmpty(t *testing.T) {
 	}
 }
 
-func TestParamsGet(t *testing.T) {
+func TestParams_Get(t *testing.T) {
 	keys := []string{
 		"int",
 		"int8",
@@ -189,7 +189,7 @@ func TestParamsGet(t *testing.T) {
 	}
 }
 
-func TestParamsGetP(t *testing.T) {
+func TestParams_GetP(t *testing.T) {
 	keys := []string{"one", "two"}
 	expected := map[string]string{
 		"one": "1",
@@ -222,7 +222,7 @@ func TestParamsGetP(t *testing.T) {
 
 // Well... this will return the same as
 // p[key].
-func TestParamsGetI(t *testing.T) {
+func TestParams_GetI(t *testing.T) {
 	keys := []string{
 		"int",
 		"string",
@@ -256,7 +256,7 @@ func TestParamsGetI(t *testing.T) {
 	}
 }
 
-func TestParamsURLValues(t *testing.T) {
+func TestParams_URLValues(t *testing.T) {
 	keys := []string{
 		"int",
 		"int8",
@@ -293,7 +293,7 @@ func TestParamsURLValues(t *testing.T) {
 	}
 }
 
-func TestParamsURLValuesWithPrefixAndSufix(t *testing.T) {
+func TestParams_URLValues_withPrefixAndSufix(t *testing.T) {
 	keys := []string{
 		"int",
 		"int8",
@@ -330,7 +330,7 @@ func TestParamsURLValuesWithPrefixAndSufix(t *testing.T) {
 	}
 }
 
-func TestParamGetString(t *testing.T) {
+func TestParam_GetString(t *testing.T) {
 	keys := []string{"float64", "string", "arrayString"}
 	expected := map[string]string{
 		"float64":     "",
@@ -346,7 +346,7 @@ func TestParamGetString(t *testing.T) {
 	}
 }
 
-func TestParamGetInt(t *testing.T) {
+func TestParam_GetInt(t *testing.T) {
 	params := parse(body)
 	keys := []string{"string", "int", "int8", "int64"}
 	expected := map[string]int{"string": 0, "int": -10, "int8": 1, "int64": 123456}
@@ -358,7 +358,7 @@ func TestParamGetInt(t *testing.T) {
 	}
 }
 
-func TestParamGetInt8(t *testing.T) {
+func TestParam_GetInt8(t *testing.T) {
 	params := parse(body)
 	keys := []string{"string", "int", "int8", "int64"}
 	expected := map[string]int8{
@@ -375,7 +375,7 @@ func TestParamGetInt8(t *testing.T) {
 	}
 }
 
-func TestParamGetInt64(t *testing.T) {
+func TestParam_GetInt64(t *testing.T) {
 	params := parse(body)
 	keys := []string{"float64", "string", "int", "int8", "int64"}
 	expected := map[string]int64{
@@ -393,7 +393,7 @@ func TestParamGetInt64(t *testing.T) {
 	}
 }
 
-func TestParamGetFloat(t *testing.T) {
+func TestParam_GetFloat(t *testing.T) {
 	params := parse(body)
 	keys := []string{"float64", "string", "int", "int8", "int64"}
 	expected := map[string]float32{
@@ -410,7 +410,7 @@ func TestParamGetFloat(t *testing.T) {
 		}
 	}
 }
-func TestParamGetFloat64(t *testing.T) {
+func TestParam_GetFloat64(t *testing.T) {
 	params := parse(body)
 	keys := []string{"float64", "string", "int", "int8", "int64"}
 	expected := map[string]float64{
@@ -428,7 +428,7 @@ func TestParamGetFloat64(t *testing.T) {
 	}
 }
 
-func TestParamGetFloat32(t *testing.T) {
+func TestParam_GetFloat32(t *testing.T) {
 	params := parse(body)
 	keys := []string{
 		"float64",
@@ -454,7 +454,7 @@ func TestParamGetFloat32(t *testing.T) {
 	}
 }
 
-func TestParamGetTime(t *testing.T) {
+func TestParam_GetTime(t *testing.T) {
 	params := parse(body)
 	keys := []string{"float64", "string", "time", "incorectTime"}
 	expected := map[string]time.Time{
@@ -479,7 +479,7 @@ func TestParamGetTime(t *testing.T) {
 	}
 }
 
-func TestParamsGetSliceStrings(t *testing.T) {
+func TestParams_GetSliceStrings(t *testing.T) {
 	params := parse(body)
 	keys := []string{"missing", "string", "arrayStrings"}
 	expected := map[string][]string{
@@ -495,7 +495,7 @@ func TestParamsGetSliceStrings(t *testing.T) {
 	}
 }
 
-func TestParamsGetSliceInts(t *testing.T) {
+func TestParams_GetSliceInts(t *testing.T) {
 	params := parse(body)
 	keys := []string{"missing", "int", "arrayInts"}
 	expected := map[string][]int{
@@ -511,7 +511,7 @@ func TestParamsGetSliceInts(t *testing.T) {
 	}
 }
 
-func TestParamsGetSlice(t *testing.T) {
+func TestParams_GetSlice(t *testing.T) {
 	params := parse(body)
 	keys := []string{"missing", "int", "arrayInts", "arrayStrings"}
 	expected := map[string][]interface{}{

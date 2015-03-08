@@ -287,6 +287,20 @@ func (p Params) NestedKeys() []string {
 	return nestedKeys(p, "", false)
 }
 
+func (p Params) Merge(set map[string]interface{}) {
+	for k, v := range set {
+		p[k] = v
+	}
+}
+
+func (p Params) Defaults(set map[string]interface{}) {
+	for k, v := range set {
+		if _, ok := p[k]; !ok {
+			p[k] = v
+		}
+	}
+}
+
 func exists(input map[string]interface{}, key string) (ok bool) {
 	if input == nil {
 		return false

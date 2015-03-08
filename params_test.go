@@ -528,6 +528,28 @@ func TestParams_GetSlice(t *testing.T) {
 	}
 }
 
+func TestParams_Keys(t *testing.T) {
+
+	params := Params{
+		"one": 1,
+		"nested": Params{
+			"two": 2,
+		},
+	}
+
+	expected := []string{
+		"one",
+		"nested",
+		"nested.two",
+	}
+
+	got := params.Keys()
+
+	if !equalSlicesStrings(got, expected) {
+		wrong(t, "Keys", expected, got)
+	}
+}
+
 func parse(contents []byte) Params {
 	var params Params
 	request := bytes.NewReader(contents)

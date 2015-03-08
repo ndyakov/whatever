@@ -320,6 +320,35 @@ func (p Params) Required(keys ...string) error {
 	return nil
 }
 
+func (p Params) Keys() []string {
+	return keys(p, "", false)
+}
+
+func keys(set Params, parent string, subParse bool) []string {
+	var key string
+	var result []string
+	for k, v := range set {
+
+		if subParse {
+			key = fmt.Sprintf("%s.%s", parent, k)
+		} else {
+			key = k
+		}
+
+		result = append(result, key)
+
+		if val, ok := v.(map[string]interface{}); ok {
+			subKeys := keys(Params(val), key, true)
+			result = append(result, subKeys...)
+		} else if val, ok := v.(Params); ok {
+			subKeys := keys(val, key, true)
+			result = append(result, subKeys...)
+		}
+
+	}
+	return result
+}
+
 func (p Params) exists(input map[string]interface{}, key string) (ok bool) {
 	if input == nil {
 		return false

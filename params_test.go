@@ -529,11 +529,37 @@ func TestParams_GetSlice(t *testing.T) {
 }
 
 func TestParams_Keys(t *testing.T) {
+	params := Params{
+		"one": 1,
+		"nested": Params{
+			"two": 2,
+			"nested": Params{
+				"three": 3,
+			},
+		},
+	}
+
+	expected := []string{
+		"one",
+		"nested",
+	}
+
+	got := params.Keys()
+
+	if !equalSlicesStrings(got, expected) {
+		wrong(t, "Keys", expected, got)
+	}
+}
+
+func TestParams_NestedKeys(t *testing.T) {
 
 	params := Params{
 		"one": 1,
 		"nested": Params{
 			"two": 2,
+			"nested": map[string]interface{}{
+				"three": 3,
+			},
 		},
 	}
 
@@ -541,12 +567,14 @@ func TestParams_Keys(t *testing.T) {
 		"one",
 		"nested",
 		"nested.two",
+		"nested.nested",
+		"nested.nested.three",
 	}
 
-	got := params.Keys()
+	got := params.NestedKeys()
 
 	if !equalSlicesStrings(got, expected) {
-		wrong(t, "Keys", expected, got)
+		wrong(t, "NestedKeys", expected, got)
 	}
 }
 

@@ -346,7 +346,7 @@ func keys(set Params) (result []string) {
 	return
 }
 
-func nestedKeys(set Params, parent string, subParse bool) []string {
+func nestedKeys(set map[string]interface{}, parent string, subParse bool) []string {
 	var key string
 	var result []string
 	for k, v := range set {
@@ -360,7 +360,7 @@ func nestedKeys(set Params, parent string, subParse bool) []string {
 		result = append(result, key)
 
 		if val, ok := v.(map[string]interface{}); ok {
-			subKeys := nestedKeys(Params(val), key, true)
+			subKeys := nestedKeys(val, key, true)
 			result = append(result, subKeys...)
 		} else if val, ok := v.(Params); ok {
 			subKeys := nestedKeys(val, key, true)

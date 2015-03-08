@@ -132,7 +132,7 @@ func TestParams_Required(t *testing.T) {
 		wrong(t, "Required", "the parameter missing.missing is required", nil)
 	}
 
-	if p.exists(nil, "nil") {
+	if exists(nil, "nil") {
 		wrong(t, "exists", false, true)
 	}
 }

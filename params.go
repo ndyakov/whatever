@@ -258,48 +258,7 @@ func (p Params) GetSliceInts(key string) []int {
 //
 // If the Params structure is blank, then an empty url.Values will be returned.
 func (p Params) URLValues(prefix, suffix string) url.Values {
-	return p.toURLValues(p, prefix, suffix, false)
-}
-
-func (p Params) toURLValues(set Params, prefix, suffix string, subParse bool) url.Values {
-	if prefix == "" {
-		prefix = "."
-		suffix = ""
-	}
-
-	result := url.Values{}
-	var subset url.Values
-	for key, value := range set {
-		var foundSubset bool
-		if v, ok := value.(Params); ok {
-			subset = p.toURLValues(v, prefix, suffix, true)
-			foundSubset = true
-		} else if v, ok := value.(map[string]interface{}); ok {
-			subset = p.toURLValues(Params(v), prefix, suffix, true)
-			foundSubset = true
-		} else if v, ok := value.([]interface{}); ok {
-			for _, el := range v {
-				result[key] = append(result[key], stringify(el))
-			}
-			continue
-		}
-		if foundSubset {
-			for k, v := range subset {
-				nestedKey := fmt.Sprintf("%s%s", key, k)
-				if subParse {
-					nestedKey = fmt.Sprintf("%s%s%s%s", prefix, key, suffix, k)
-				}
-				result[nestedKey] = append(result[nestedKey], v...)
-			}
-		} else {
-			valueKey := key
-			if subParse {
-				valueKey = fmt.Sprintf("%s%s%s", prefix, key, suffix)
-			}
-			result[valueKey] = append(result[valueKey], stringify(value))
-		}
-	}
-	return result
+	return toURLValues(p, prefix, suffix, false)
 }
 
 // Required will return an error if one of the passed keys is missing
@@ -312,7 +271,7 @@ func (p Params) toURLValues(set Params, prefix, suffix string, subParse bool) ur
 // If all keys are present will return nil.
 func (p Params) Required(keys ...string) error {
 	for _, key := range keys {
-		if ok := p.exists(p, key); !ok {
+		if ok := exists(p, key); !ok {
 			return fmt.Errorf("the parameter %s is required", key)
 		}
 	}
@@ -349,7 +308,7 @@ func keys(set Params, parent string, subParse bool) []string {
 	return result
 }
 
-func (p Params) exists(input map[string]interface{}, key string) (ok bool) {
+func exists(input map[string]interface{}, key string) (ok bool) {
 	if input == nil {
 		return false
 	}
@@ -367,7 +326,7 @@ func (p Params) exists(input map[string]interface{}, key string) (ok bool) {
 			return false
 		}
 
-		ok = p.exists(params, pair[1])
+		ok = exists(params, pair[1])
 	} else {
 		var v interface{}
 		v, ok = input[key]
@@ -385,4 +344,77 @@ func stringify(v interface{}) string {
 	}
 
 	return fmt.Sprintf("%v", v)
+}
+
+func keys(set Params) (result []string) {
+	for k, _ := range set {
+		result = append(result, k)
+	}
+	return
+}
+
+func nestedKeys(set Params, parent string, subParse bool) []string {
+	var key string
+	var result []string
+	for k, v := range set {
+
+		if subParse {
+			key = fmt.Sprintf("%s.%s", parent, k)
+		} else {
+			key = k
+		}
+
+		result = append(result, key)
+
+		if val, ok := v.(map[string]interface{}); ok {
+			subKeys := nestedKeys(Params(val), key, true)
+			result = append(result, subKeys...)
+		} else if val, ok := v.(Params); ok {
+			subKeys := nestedKeys(val, key, true)
+			result = append(result, subKeys...)
+		}
+
+	}
+	return result
+}
+
+func toURLValues(set Params, prefix, suffix string, subParse bool) url.Values {
+	if prefix == "" {
+		prefix = "."
+		suffix = ""
+	}
+
+	result := url.Values{}
+	var subset url.Values
+	for key, value := range set {
+		var foundSubset bool
+		if v, ok := value.(Params); ok {
+			subset = toURLValues(v, prefix, suffix, true)
+			foundSubset = true
+		} else if v, ok := value.(map[string]interface{}); ok {
+			subset = toURLValues(Params(v), prefix, suffix, true)
+			foundSubset = true
+		} else if v, ok := value.([]interface{}); ok {
+			for _, el := range v {
+				result[key] = append(result[key], stringify(el))
+			}
+			continue
+		}
+		if foundSubset {
+			for k, v := range subset {
+				nestedKey := fmt.Sprintf("%s%s", key, k)
+				if subParse {
+					nestedKey = fmt.Sprintf("%s%s%s%s", prefix, key, suffix, k)
+				}
+				result[nestedKey] = append(result[nestedKey], v...)
+			}
+		} else {
+			valueKey := key
+			if subParse {
+				valueKey = fmt.Sprintf("%s%s%s", prefix, key, suffix)
+			}
+			result[valueKey] = append(result[valueKey], stringify(value))
+		}
+	}
+	return result
 }

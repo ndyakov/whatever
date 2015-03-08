@@ -578,6 +578,64 @@ func TestParams_NestedKeys(t *testing.T) {
 	}
 }
 
+func TestParams_Merge(t *testing.T) {
+	params := Params{
+		"one": 1,
+		"nested": Params{
+			"two": 2,
+			"nested": map[string]interface{}{
+				"three": 3,
+			},
+		},
+	}
+
+	secondParams := Params{
+		"one": 10,
+	}
+
+	params.Merge(secondParams)
+
+	expected := 10
+	got := params.GetInt("one")
+
+	if expected != got {
+		wrong(t, "Merge", expected, got)
+	}
+}
+
+func TestParams_Defaults(t *testing.T) {
+	params := Params{
+		"one": 1,
+		"nested": Params{
+			"two": 2,
+			"nested": map[string]interface{}{
+				"three": 3,
+			},
+		},
+	}
+
+	defaults := Params{
+		"one": 10,
+		"six": 6,
+	}
+
+	params.Defaults(defaults)
+
+	expected := 1
+	got := params.GetInt("one")
+
+	if expected != got {
+		wrong(t, "Defaults", expected, got)
+	}
+
+	expected = 6
+	got = params.GetInt("six")
+
+	if expected != got {
+		wrong(t, "Defaults", expected, got)
+	}
+}
+
 func parse(contents []byte) Params {
 	var params Params
 	request := bytes.NewReader(contents)

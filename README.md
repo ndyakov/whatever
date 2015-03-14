@@ -5,7 +5,7 @@
 [![GoDoc](https://godoc.org/github.com/ndyakov/whatever?status.png)](https://godoc.org/github.com/ndyakov/whatever)
 [![status](https://sourcegraph.com/api/repos/github.com/ndyakov/whatever/.badges/status.svg)](https://sourcegraph.com/github.com/ndyakov/whatever)
 
-Package __whatever__ is a Go package that exports type Params with some useful methods on top of map[string]interface{}
+Package __whatever__ is a Go package that exports type Params with some useful methods on top of `map[string]interface{}`
 
 ## Example
 
@@ -80,7 +80,9 @@ If you need you can validate the existence of a specific key by
 using the Required method.
 
 ### [type Params](http://godoc.org/github.com/ndyakov/whatever#Params)
+
 _This may be outdated, please check the godoc for up-to-date documentation_
+
 * [func NewFromJSON(jsonBody []byte) (Params, error)](http://godoc.org/github.com/ndyakov/whatever#NewFromJSON)
 * [func (p Params) Add(key string, value interface{}) bool](http://godoc.org/github.com/ndyakov/whatever#Params.Add)
 * [func (p Params) Empty() bool](http://godoc.org/github.com/ndyakov/whatever#Params.Empty)
@@ -105,6 +107,7 @@ _This may be outdated, please check the godoc for up-to-date documentation_
 ## Contributions
 
 Before contributing please execute:
+
 * gofmt
 * golint
 * govet

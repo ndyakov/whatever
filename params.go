@@ -279,10 +279,19 @@ func (p Params) Required(keys ...string) error {
 	return nil
 }
 
+// Keys will return the top-level keys of the params.
+// Keep in mind if you need the nested keys as well you can
+// use NestedKeys.
 func (p Params) Keys() []string {
 	return keys(p)
 }
 
+// NestedKeys will return all keys in the params map.
+// The nested keys will be prefixed with a dot.
+// Example:
+//     { "one": { "two": 3 } }
+// Will result in the following key:
+//     "one.two"
 func (p Params) NestedKeys() []string {
 	return nestedKeys(p, "", false)
 }
@@ -340,7 +349,7 @@ func stringify(v interface{}) string {
 }
 
 func keys(set Params) (result []string) {
-	for k, _ := range set {
+	for k := range set {
 		result = append(result, k)
 	}
 	return

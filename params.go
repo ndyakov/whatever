@@ -50,10 +50,12 @@ func (p Params) Empty() bool {
 	return true
 }
 
-// Remove deletes a key from the structure.
+// Delete deletes a key from the structure
+// and returns it's value.
 // It won't fail even if called on a missing key.
-func (p Params) Remove(key string) {
-	delete(p, key)
+func (p Params) Delete(key string) interface{} {
+	defer delete(p, key)
+	return p[key]
 }
 
 // GetP will return Params structure if the value with

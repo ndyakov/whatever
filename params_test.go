@@ -139,11 +139,22 @@ func TestParams_Required(t *testing.T) {
 
 func TestParams_Delete(t *testing.T) {
 	p := Params{"one": 1}
-	p.Remove("one")
+	v := p.Delete("one")
+
+	if v != 1 {
+		wrong(t, "Delete", 1, v)
+	}
 
 	if _, ok := p["one"]; ok {
 		wrong(t, "[\"one\"]", false, true)
 	}
+
+	v = p.Delete("missing")
+
+	if v != nil {
+		wrong(t, "Delete", nil, v)
+	}
+
 }
 
 func TestParams_Empty(t *testing.T) {

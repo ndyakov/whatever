@@ -52,6 +52,12 @@ func (p Params) Empty() bool {
 
 // Delete deletes a key from the structure
 // and returns it's value.
+//
+// This method works only on top-level keys.
+// To delete a nested parameter you may want to
+// you may want to first call GetP to get the nested
+// object.
+//
 // It won't fail even if called on a missing key.
 func (p Params) Delete(key string) interface{} {
 	defer delete(p, key)

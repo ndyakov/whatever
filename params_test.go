@@ -138,7 +138,14 @@ func TestParams_Required(t *testing.T) {
 }
 
 func TestParams_Delete(t *testing.T) {
-	p := Params{"one": 1}
+	p := Params{
+		"one": 1,
+		"nested": Params{ // this can be map[string]interface{} too
+			"two":   2,
+			"three": 3,
+		},
+	}
+
 	v := p.Delete("one")
 
 	if v != 1 {
@@ -150,6 +157,18 @@ func TestParams_Delete(t *testing.T) {
 	}
 
 	v = p.Delete("missing")
+
+	if v != nil {
+		wrong(t, "Delete", nil, v)
+	}
+
+	v = p.GetP("nested").Delete("two")
+
+	if v != 2 {
+		wrong(t, "Delete", 2, v)
+	}
+
+	v = p.GetP("nested").Delete("two")
 
 	if v != nil {
 		wrong(t, "Delete", nil, v)

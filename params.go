@@ -58,6 +58,10 @@ func (p Params) Empty() bool {
 // you may want to first call GetP to get the nested
 // object.
 //
+// Example:
+//
+//    v := params.GetP("nested").Delete("key")
+//
 // It won't fail even if called on a missing key.
 func (p Params) Delete(key string) interface{} {
 	defer delete(p, key)

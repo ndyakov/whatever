@@ -308,6 +308,11 @@ func (p Params) NestedKeys() []string {
 	return nestedKeys(p, "", false)
 }
 
+// Merge merges two params objects (the parameter can
+// be map[string]interface{} as well). All fields from the
+// parameter will be set to the receiver.
+//
+// Note: This is working only on top-level keys.
 func (p Params) Merge(set map[string]interface{}) {
 	for k, v := range set {
 		p[k] = v
